@@ -7,6 +7,10 @@ class RedisClient {
         this.client.on('error', (err) => {
             console.error('Redis client error:', err);
         });
+
+        this.client.on('ready', () => {
+            console.log('Redis client connected');
+        });
     }
 
     isAlive() {
@@ -17,6 +21,7 @@ class RedisClient {
         return new Promise((resolve, reject) => {
             this.client.get(key, (err, value) => {
                 if (err) {
+                    console.error('Redis get error:', err);
                     reject(err);
                 } else {
                     resolve(value);
@@ -29,6 +34,7 @@ class RedisClient {
         return new Promise((resolve, reject) => {
             this.client.set(key, value, 'EX', duration, (err) => {
                 if (err) {
+                    console.error('Redis set error:', err);
                     reject(err);
                 } else {
                     resolve();
@@ -41,6 +47,7 @@ class RedisClient {
         return new Promise((resolve, reject) => {
             this.client.del(key, (err) => {
                 if (err) {
+                    console.error('Redis del error:', err);
                     reject(err);
                 } else {
                     resolve();
